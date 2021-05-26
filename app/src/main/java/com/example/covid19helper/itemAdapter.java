@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,18 +20,20 @@ public class itemAdapter extends RecyclerView.Adapter<itemAdapter.itemViewHolder
     private Context mCtx;
     private List<item_set> itemList;
     private OnItemHoldListener mOnItemHoldListener;
+    private OnItemClickListener mOnItemClickListener;
 
-    public itemAdapter(Context mCtx, List<item_set> itemList, OnItemHoldListener onItemHoldListener) {
+    public itemAdapter(Context mCtx, List<item_set> itemList, OnItemHoldListener onItemHoldListener, OnItemClickListener onItemClickListener) {
         this.mCtx = mCtx;
         this.itemList = itemList;
         this.mOnItemHoldListener = onItemHoldListener;
+        this.mOnItemClickListener = onItemClickListener;
     }
 
     @NonNull
     @Override
     public itemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mCtx).inflate(R.layout.item, parent, false);
-        return new itemViewHolder(view, mOnItemHoldListener);
+        return new itemViewHolder(view, mOnItemHoldListener,mOnItemClickListener);
     }
 
     @Override
@@ -55,12 +58,13 @@ public class itemAdapter extends RecyclerView.Adapter<itemAdapter.itemViewHolder
         return itemList.size();
     }
 
-    class itemViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
+    class itemViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener, View.OnClickListener{
 
         TextView textViewAddress, textViewCity, textViewContact, textViewDistance, textViewLeadType, textViewIsVerified;
         OnItemHoldListener onItemHoldListener;
+        OnItemClickListener onItemClickListener;
 
-        public itemViewHolder(@NonNull View itemView, OnItemHoldListener onItemHoldListener) {
+        public itemViewHolder(@NonNull View itemView, OnItemHoldListener onItemHoldListener, OnItemClickListener onItemClickListener) {
             super(itemView);
 
             textViewAddress = itemView.findViewById(R.id.address_item_tv);
@@ -70,8 +74,10 @@ public class itemAdapter extends RecyclerView.Adapter<itemAdapter.itemViewHolder
             textViewLeadType = itemView.findViewById(R.id.lead_item_tv);
             textViewIsVerified = itemView.findViewById(R.id.is_verified_item_tv);
             this.onItemHoldListener = onItemHoldListener;
+            this.onItemClickListener = onItemClickListener;
 
             itemView.setOnLongClickListener(this);
+            itemView.setOnClickListener(this);
         }
 
 
@@ -80,9 +86,18 @@ public class itemAdapter extends RecyclerView.Adapter<itemAdapter.itemViewHolder
             onItemHoldListener.onItemHold(getAbsoluteAdapterPosition());
             return true;
         }
+
+        @Override
+        public void onClick(View v) {
+            onItemClickListener.onItemClick(getAbsoluteAdapterPosition());
+        }
     }
 
     public interface OnItemHoldListener {
         void onItemHold(int position);
+    }
+
+    public interface OnItemClickListener{
+        void onItemClick(int postition);
     }
 }

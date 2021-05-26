@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -31,7 +32,7 @@ import java.util.List;
 
 import static java.lang.Math.*;
 
-public class plasma_activity extends AppCompatActivity implements itemAdapter.OnItemHoldListener {
+public class plasma_activity extends AppCompatActivity implements itemAdapter.OnItemHoldListener,itemAdapter.OnItemClickListener {
 
     // Firebase instance variables
     private FirebaseAuth mfirebaseAuth;
@@ -70,7 +71,7 @@ public class plasma_activity extends AppCompatActivity implements itemAdapter.On
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
         itemArrayList = new ArrayList<>();
-        adapter = new itemAdapter(this,itemArrayList,this);
+        adapter = new itemAdapter(this,itemArrayList,this,this);
         recyclerView.setAdapter(adapter);
 
         // Initialize Firebase components
@@ -161,14 +162,6 @@ public class plasma_activity extends AppCompatActivity implements itemAdapter.On
         return ans_string;
     }
 
-    @Override
-    public void onItemHold(int position) {
-        post_id = itemArrayList.get(position).getPost_id();
-        Query query = mpost_databaseReference.child(post_id)
-                .child("feedback_list");
-        query.addListenerForSingleValueEvent(mIsUserFeedbackRecordedValueEventListener);
-    }
-
     ValueEventListener mIsUserFeedbackRecordedValueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -197,4 +190,20 @@ public class plasma_activity extends AppCompatActivity implements itemAdapter.On
 
         }
     };
+
+    @Override
+    public void onItemHold(int position) {
+        post_id = itemArrayList.get(position).getPost_id();
+        Query query = mpost_databaseReference.child(post_id)
+                .child("feedback_list");
+        query.addListenerForSingleValueEvent(mIsUserFeedbackRecordedValueEventListener);
+    }
+
+    @Override
+    public void onItemClick(int postition) {
+        String uri = "tel:" + "+91" + itemArrayList.get(postition).getContact().trim();
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse(uri));
+        startActivity(intent);
+    }
 }
