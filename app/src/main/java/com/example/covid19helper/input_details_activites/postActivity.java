@@ -109,6 +109,8 @@ public class postActivity extends AppCompatActivity implements AdapterView.OnIte
                 mdatabaseReference.push().setValue(mpostSet);
 
                 Intent intent = new Intent(postActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
 
             }

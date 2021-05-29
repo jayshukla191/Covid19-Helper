@@ -83,6 +83,8 @@ public class corona_patients_activity extends AppCompatActivity implements itemA
 
         isUserFeedbackRecorded = false;
 
+        Toast.makeText(this,"Tap to Contact And Hold to give Feedback",Toast.LENGTH_SHORT).show();
+
         if (muser != null) {
             Query query1 = muser_details_databaseReference
                     .orderByChild("uid")

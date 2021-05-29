@@ -86,11 +86,9 @@ public class map_activity extends AppCompatActivity implements OnMapReadyCallbac
         initGoogleMap();
 
         Intent intent = getIntent();
-
         if(intent.getStringExtra("calling_activity").equals(details_form.class.toString())){
             totalAddress = intent.getStringExtra("total_address");
             mSearchAddress.setText(totalAddress);
-
             mAddress = intent.getStringExtra("address");
             mName = intent.getStringExtra("name");
             mCity = intent.getStringExtra("city");
