@@ -215,6 +215,7 @@ public class map_activity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap=googleMap;
         gotoLocation(DELHI_LAT,DELHI_LNG);
+        mBtnLocate.performClick();
 
         mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
         mGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
